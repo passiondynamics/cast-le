@@ -7,8 +7,8 @@ def popular_movies(pages, headers):
         This function calls the TMDB API for the popular movies list
     
         :param pages: int - number of pages of top rated movies to get there are 20 results on each page
-        :param headers: json - api authorization header
-        :return: json return the api response of popular movies
+        :param headers: dict - api authorization header
+        :return: dict return the api response of popular movies
     """
     
     # api endpoint
@@ -25,8 +25,8 @@ def toprated_movies(pages, headers):
         This function calls the TMDB API for the top rated movies list
     
         :param pages: int - number of pages of top rated movies to get there are 20 results on each page
-        :param headers: json - api authorization header
-        :return: json return the api response of top rated movies
+        :param headers: dict - api authorization header
+        :return: dict return the api response of top rated movies
     """
     
     # api endpoint
@@ -41,8 +41,8 @@ def extract_movie_data(movies):
     """
         Take the movie id and title out of the API results
 
-        :param movies: json - a json of movie data
-        :return: json return only the extracted data from the movies should be just the ids and the title
+        :param movies: dict - a dict of movie data
+        :return: dict return only the extracted data from the movies should be just the ids and the title
     """
 
     # extract ID and Title
@@ -58,9 +58,9 @@ def actors(movies, headers):
     """
         This function gets the actors from a given movie and then calls the popular_actors function to get the most popular ones
 
-        :param movies: json - a json of movie data
-        :param headers: json - api authorization header
-        :return: json return the movies json after adding the most popular actors to each movie
+        :param movies: dict - a dict of movie data
+        :param headers: dict - api authorization header
+        :return: dict return the movies dict after adding the most popular actors to each movie
     """
     
     # run an api call on each movie and get the cast, after that call popular_actors to get the most popular actors and add them to the json
@@ -82,7 +82,7 @@ def popular_actors(cast):
     """
         This is a helper function that gets the most popular actors from a given movie cast.
 
-        :param cast: json - the cast of a certain movie as well as data on the actors one entry looks like this 
+        :param cast: dict - the cast of a certain movie as well as data on the actors one entry looks like this 
         "cast": [
             {
             "adult": false,
@@ -100,7 +100,7 @@ def popular_actors(cast):
             }
         ]
         
-        :return: json - return the ids of the most popular actors
+        :return: dict - return the ids of the most popular actors
     """
     # sort the cast list based on popularity in descending order
     sorted_cast = sorted(cast["cast"], key=lambda x: x["popularity"], reverse=True)
@@ -117,9 +117,9 @@ def actor_images(movies, headers):
     """
         This function gets the actors images from the api
 
-        :param movies: json - a json of movie data
-        :param headers: json - api authorization header
-        :return: json the updated movies json with pictures of the actors 
+        :param movies: dict - a dict of movie data
+        :param headers: dict - api authorization header
+        :return: dict the updated movies dict with pictures of the actors 
     """
     actor_url = []
 
@@ -146,9 +146,9 @@ def related_movies(movies, headers):
     """
         This function gets the related movies to the movies in our json this is to consider answers that will have the same 4 actors in a sequel
 
-        :param movies: json - a json of movie data
-        :param headers: json - api authorization header
-        :return: json the movies json with the related movies added
+        :param movies: dict - a dict of movie data
+        :param headers: dict - api authorization header
+        :return: dict the movies dict with the related movies added
     """
 
     movie_set = None
