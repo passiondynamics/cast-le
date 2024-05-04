@@ -12,7 +12,7 @@ def popular_movies(pages, headers):
     """
     
     # api endpoint
-    url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page={}&region=US".format(pages)
+    url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page={}&region=840".format(pages) # region 840 is USA see https://en.wikipedia.org/wiki/ISO_3166-1 for other country codes
 
     # use the api url and headers to get the information on the popular movies
     response = requests.get(url, headers=headers)
@@ -30,7 +30,7 @@ def toprated_movies(pages, headers):
     """
     
     # api endpoint
-    url = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page={}&region=US".format(pages)
+    url = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page={}&region=840".format(pages)
 
     # use the api url and headers to get the information on the popular movies
     response = requests.get(url, headers=headers)
@@ -49,9 +49,8 @@ def extract_movie_data(movies):
     extracted_data = [
         {"id": movie.get("id"), "title": movie.get("title")}
         for movie in movies.get("results", [])
-        if 16 not in movie.get("genre_ids", [])
+        if 16 not in movie.get("genre_ids", []) # genre 16 is animation we are choosing to ignore it for now since it will be difficult to recognize actors
     ]
-    
     return {"movies": extracted_data}
 
 
@@ -122,6 +121,8 @@ def actor_images(movies, headers):
         :param headers: json - api authorization header
         :return: json the updated movies json with pictures of the actors 
     """
+    actor_url = []
+
     for movie in movies.get("movies", []):
         actor_ids = movie.get("actors", [])
         for actor_id in actor_ids:
@@ -134,9 +135,9 @@ def actor_images(movies, headers):
             # Get the 1920x1080 image if available, otherwise use the first available image
             if images:
                 image_url = next((img["file_path"] for img in images if img["width"] == 1920 and img["height"] == 1080), images[0]["file_path"])
-                actor_images[actor_id] = image_url
+                actor_url.append(image_url)
 
-            movie["actor_images"] = images # note for testing make sure this adds to actor_images and does not overwrite actor images
+            movie["actor_images"] = actor_url # note for testing make sure this adds to actor_images and does not overwrite actor images
     
     return movies
 

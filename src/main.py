@@ -1,4 +1,4 @@
-from movies import *
+from src.movies import *
 
 def hello():
     return 'Hello world!'
