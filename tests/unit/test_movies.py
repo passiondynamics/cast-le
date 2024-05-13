@@ -65,166 +65,155 @@ def test_toprated_movies():
 
 
 def test_extract_movie_data():
-    # api authorization
-    headers = {
-        "accept": "accept",
-        "Authorization": "authorization"
+    data = {
+        "page": 1,
+        "results": [
+            {
+                "backdrop_path": "/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg",
+                "genre_ids": [
+                18,
+                80
+                ],
+                "id": 278,
+                "original_language": "en",
+                "original_title": "The Shawshank Redemption",
+                "overview": "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+                "popularity": 139.421,
+                "poster_path": "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+                "release_date": "1994-09-23",
+                "title": "The Shawshank Redemption",
+                "vote_average": 8.711,
+                "vote_count": 25398
+            },
+            {
+                "backdrop_path": "/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg",
+                "genre_ids": [
+                18,
+                80
+                ],
+                "id": 238,
+                "original_language": "en",
+                "original_title": "The Godfather",
+                "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+                "popularity": 129.69,
+                "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+                "release_date": "1972-03-24",
+                "title": "The Godfather",
+                "vote_average": 8.7,
+                "vote_count": 19340
+            },
+            {
+                "backdrop_path": "/kGzFbGhp99zva6oZODW5atUtnqi.jpg",
+                "genre_ids": [
+                18,
+                80
+                ],
+                "id": 240,
+                "original_language": "en",
+                "original_title": "The Godfather Part II",
+                "overview": "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
+                "popularity": 71.736,
+                "poster_path": "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg",
+                "release_date": "1974-12-20",
+                "title": "The Godfather Part II",
+                "vote_average": 8.6,
+                "vote_count": 11667
+            }
+        ]
+    }
+        
+    expected = {
+        "movies": [
+                {
+                "id": 278,
+                "title": "The Shawshank Redemption"
+                },
+                {
+                "id": 238,
+                "title": "The Godfather"
+                },
+                {
+                "id": 240,
+                "title": "The Godfather Part II"
+                }
+        ]
+    }
+    actual = src.movies.extract_movie_data(data)
+    assert actual == expected
+
+    data = {
+        "page": 1,
+        "results": [
+            {
+                "backdrop_path": "/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg",
+                "genre_ids": [
+                18,
+                80,
+                16
+                ],
+                "id": 278,
+                "original_language": "en",
+                "original_title": "The Shawshank Redemption",
+                "overview": "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+                "popularity": 139.421,
+                "poster_path": "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+                "release_date": "1994-09-23",
+                "title": "The Shawshank Redemption",
+                "vote_average": 8.711,
+                "vote_count": 25398
+            },
+            {
+                "backdrop_path": "/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg",
+                "genre_ids": [
+                18,
+                80
+                ],
+                "id": 238,
+                "original_language": "en",
+                "original_title": "The Godfather",
+                "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+                "popularity": 129.69,
+                "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+                "release_date": "1972-03-24",
+                "title": "The Godfather",
+                "vote_average": 8.7,
+                "vote_count": 19340
+            },
+            {
+                "backdrop_path": "/kGzFbGhp99zva6oZODW5atUtnqi.jpg",
+                "genre_ids": [
+                18,
+                80
+                ],
+                "id": 240,
+                "original_language": "en",
+                "original_title": "The Godfather Part II",
+                "overview": "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
+                "popularity": 71.736,
+                "poster_path": "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg",
+                "release_date": "1974-12-20",
+                "title": "The Godfather Part II",
+                "vote_average": 8.6,
+                "vote_count": 11667
+            }
+        ]
+    }
+        
+    expected = {
+        "movies": [
+                {
+                "id": 238,
+                "title": "The Godfather"
+                },
+                {
+                "id": 240,
+                "title": "The Godfather Part II"
+                }
+        ]
     }
 
-    # copied the same testing style as popular movies refer to that for more detailed comments
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&region=840", json={
-            "page": 1,
-            "results": [
-                {
-                    "backdrop_path": "/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg",
-                    "genre_ids": [
-                    18,
-                    80
-                    ],
-                    "id": 278,
-                    "original_language": "en",
-                    "original_title": "The Shawshank Redemption",
-                    "overview": "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
-                    "popularity": 139.421,
-                    "poster_path": "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-                    "release_date": "1994-09-23",
-                    "title": "The Shawshank Redemption",
-                    "vote_average": 8.711,
-                    "vote_count": 25398
-                },
-                {
-                    "backdrop_path": "/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg",
-                    "genre_ids": [
-                    18,
-                    80
-                    ],
-                    "id": 238,
-                    "original_language": "en",
-                    "original_title": "The Godfather",
-                    "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
-                    "popularity": 129.69,
-                    "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-                    "release_date": "1972-03-24",
-                    "title": "The Godfather",
-                    "vote_average": 8.7,
-                    "vote_count": 19340
-                },
-                {
-                    "backdrop_path": "/kGzFbGhp99zva6oZODW5atUtnqi.jpg",
-                    "genre_ids": [
-                    18,
-                    80
-                    ],
-                    "id": 240,
-                    "original_language": "en",
-                    "original_title": "The Godfather Part II",
-                    "overview": "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
-                    "popularity": 71.736,
-                    "poster_path": "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg",
-                    "release_date": "1974-12-20",
-                    "title": "The Godfather Part II",
-                    "vote_average": 8.6,
-                    "vote_count": 11667
-                }
-            ]
-        }
-        )
-        expected = {
-            "movies": [
-                    {
-                    "id": 278,
-                    "title": "The Shawshank Redemption"
-                    },
-                    {
-                    "id": 238,
-                    "title": "The Godfather"
-                    },
-                    {
-                    "id": 240,
-                    "title": "The Godfather Part II"
-                    }
-            ]
-        }
-        data = src.movies.toprated_movies(1, headers)
-        actual = src.movies.extract_movie_data(data)
-        assert actual == expected
-
-    # this test will be to ensure animated movies (movies with genre id 16) are taken out
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&region=840", json={
-            "page": 1,
-            "results": [
-                {
-                    "backdrop_path": "/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg",
-                    "genre_ids": [
-                    18,
-                    80,
-                    16
-                    ],
-                    "id": 278,
-                    "original_language": "en",
-                    "original_title": "The Shawshank Redemption",
-                    "overview": "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
-                    "popularity": 139.421,
-                    "poster_path": "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-                    "release_date": "1994-09-23",
-                    "title": "The Shawshank Redemption",
-                    "vote_average": 8.711,
-                    "vote_count": 25398
-                },
-                {
-                    "backdrop_path": "/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg",
-                    "genre_ids": [
-                    18,
-                    80
-                    ],
-                    "id": 238,
-                    "original_language": "en",
-                    "original_title": "The Godfather",
-                    "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
-                    "popularity": 129.69,
-                    "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-                    "release_date": "1972-03-24",
-                    "title": "The Godfather",
-                    "vote_average": 8.7,
-                    "vote_count": 19340
-                },
-                {
-                    "backdrop_path": "/kGzFbGhp99zva6oZODW5atUtnqi.jpg",
-                    "genre_ids": [
-                    18,
-                    80
-                    ],
-                    "id": 240,
-                    "original_language": "en",
-                    "original_title": "The Godfather Part II",
-                    "overview": "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
-                    "popularity": 71.736,
-                    "poster_path": "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg",
-                    "release_date": "1974-12-20",
-                    "title": "The Godfather Part II",
-                    "vote_average": 8.6,
-                    "vote_count": 11667
-                }
-            ]
-        }
-        )
-        expected = {
-            "movies": [
-                    {
-                    "id": 238,
-                    "title": "The Godfather"
-                    },
-                    {
-                    "id": 240,
-                    "title": "The Godfather Part II"
-                    }
-            ]
-        }
-        data = src.movies.toprated_movies(1, headers)
-        actual = src.movies.extract_movie_data(data)
-        assert actual == expected
+    actual = src.movies.extract_movie_data(data)
+    assert actual == expected
 
 
 def test_actors():
@@ -235,21 +224,7 @@ def test_actors():
     }
 
     # copied the same testing style as popular movies refer to that for more detailed comments.
-    # test_actors expected will be different since there is parsing being done while running the functions.
-    # Also notice the two mock requests to account for the two requests completed by the called functions
-    # Yes I did realize I could have just simplified this with a simple input variable but I already did it this way and I'm too lazy to change it
-    with requests_mock.Mocker() as mock_requests:
-        mock_requests.get("https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&region=840", json={
-            "page": 1,
-            "results": [
-                {
-                    "id": 278,
-                    "title": "The Shawshank Redemption"
-                }
-            ]
-        }
-        )
-        
+    with requests_mock.Mocker() as mock_requests:      
         mock_requests.get("https://api.themoviedb.org/3/movie/278/credits?language=en-US", json={
             "id": 278,
             "cast": [
@@ -362,8 +337,15 @@ def test_actors():
         )
         expected = {'movies': [{'id': 278, 'title': "The Shawshank Redemption", 'actors': [192, 6574, 6573, 504]}]}
 
-        data = src.movies.toprated_movies(1, headers)
-        data = src.movies.extract_movie_data(data)
+        data = {
+        "movies": [
+                {
+                "id": 278,
+                "title": "The Shawshank Redemption"
+                }
+        ]
+        }
+
         actual = src.movies.actors(data, headers)
         assert actual == expected
 
