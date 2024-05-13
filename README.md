@@ -1,4 +1,4 @@
-# cinneguess
+# cineguess
 
 ## Contributing
 
