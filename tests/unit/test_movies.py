@@ -4,10 +4,10 @@ import src.movies
 import requests_mock
 
 def test_popular_movies():
-    # api authorization
+    # api authorization since we are using mock this doesn't need to have real values in it
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "accept": "accept",
+        "Authorization": "authorization"
     }
 
     # this function makes it so a call to the api using this endpoint will return this information
@@ -37,8 +37,8 @@ def test_popular_movies():
 def test_toprated_movies():
     # api authorization
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "accept": "accept",
+        "Authorization": "authorization"
     }
 
     # copied the same testing style as popular movies refer to that for more detailed comments
@@ -67,8 +67,8 @@ def test_toprated_movies():
 def test_extract_movie_data():
     # api authorization
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "accept": "accept",
+        "Authorization": "authorization"
     }
 
     # copied the same testing style as popular movies refer to that for more detailed comments
@@ -230,8 +230,8 @@ def test_extract_movie_data():
 def test_actors():
     # api authorization
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "accept": "accept",
+        "Authorization": "authorization"
     }
 
     # copied the same testing style as popular movies refer to that for more detailed comments.
@@ -490,8 +490,8 @@ def test_actor_images():
     
     # api authorization
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "accept": "accept",
+        "Authorization": "authorization"
     }
 
     with requests_mock.Mocker() as mock_requests:
