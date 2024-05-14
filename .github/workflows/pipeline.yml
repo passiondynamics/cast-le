@@ -1,5 +1,5 @@
-name: Backend
-run-name:  ${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+name: cineguess-backend
+run-name: ${{github.run_id}}.${{github.run_attempt}}
 on:
   push:
     branches:
@@ -7,14 +7,48 @@ on:
   pull_request:
     branches:
       - main
+
+# For authenticating with AWS.
+permissions:
+  id-token: write
+
 jobs:
-  pipeline:
+  init:
+    name: Initialize
     runs-on: ubuntu-latest
+    steps:
+      # Because we can't derive env variables from other env variables...
+      - name: Set up pipeline vars
+        id: pipeline_vars
+        run: |
+          rn="${{github.event.repository.name}}"
+          pi="${{github.event.repository.owner.login}}.$rn.${{github.run_id}}.${{github.run_attempt}}"
+          af="artifact-$pi.zip"
+          [ "${{github.event_name}}" == "push" ] && de="prod" || de="dev"
+          abk="$de/$rn/$af"
+
+          echo "[*] Pipeline vars:"
+          printf "artifact_filename=$af\nartifact_bucket_key=$abk\ndeployment_env=$de\npipeline_id=$pi\nrepository_name=$rn\n" | tee -a "$GITHUB_OUTPUT"
+    outputs:
+      artifact_filename: ${{steps.pipeline_vars.outputs.artifact_filename}}
+      artifact_bucket_key: ${{steps.pipeline_vars.outputs.artifact_bucket_key}}
+      deployment_env: ${{steps.pipeline_vars.outputs.deployment_env}}
+      repository_name: ${{steps.pipeline_vars.outputs.repository_name}}
+      pipeline_id: ${{steps.pipeline_vars.outputs.pipeline_id}}
+  build:
+    name: Build
+    needs: init
+    runs-on: ubuntu-latest
+    environment: ${{needs.init.outputs.deployment_env}}
+    env:
+      # Use env vars for easier repeated reference.
+      artifact_filename: ${{needs.init.outputs.artifact_filename}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
+            cft.yml
             Pipfile.lock
             src/
             tests/
@@ -23,28 +57,100 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: 'pipenv'
       - name: Set up pipenv
         run: |
           echo "[*] Installing pipenv..."
           pip install pipenv
           echo "[*] Syncing `Pipfile.lock`..."
           pipenv sync --dev
+      - name: Run linter
+        run: pipenv run black --check src
       - name: Run unit tests
-        run: pipenv run pytest --cov=src tests/unit/
+        run: pipenv run pytest --cov=src --cov-fail-under=${{vars.TEST_COVERAGE_MINIMUM}} tests/unit/
       - name: Build artifact
         run: |
-            echo "[*] Setting up artifact workspace..."
-            mkdir package/
-            echo "[*] Downloading dependencies..."
-            pipenv requirements > requirements.txt
-            pipenv run pip install -t package/ -r requirements.txt
-            echo "[*] Copying source files..."
-            cp -r src package/
-            echo "[*] Zipping workspace..."
-            cd package/
-            zip -r ../artifact.zip .
-            cd ..
-            echo "[*] Cleaning up workspace..."
-            rm -r requirements.txt package/
-            ls -Ahl
+          echo "[*] Downloading dependencies..."
+          mkdir package/
+          pipenv requirements > requirements.txt
+          pipenv run pip install -t package/ -r requirements.txt
+          echo "[*] Copying source files..."
+          ls src
+          cp -r src package/
+          echo "[*] Bundling artifact..."
+          cd package/
+          zip -r "../$artifact_filename" .
+          cd ..
+          echo "[*] Cleaning up workspace..."
+          rm -r requirements.txt package/
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{vars.AWS_REGION}}
+          role-to-assume: ${{vars.AWS_DEPLOY_ROLE_ARN}}
+          role-session-name: ${{needs.init.outputs.pipeline_id}}
+      # The next three steps, for two reasons:
+      # 1. CFTs can't deploy code changes using a local zipfile.
+      # 2. Avoid using Github artifacts/storage quota.
+      - name: Store artifact in S3
+        run: aws s3 cp "$artifact_filename" "s3://${{vars.S3_ARTIFACT_BUCKET_NAME}}/${{needs.init.outputs.artifact_bucket_key}}"
+      - name: Write CFT content to output
+        id: write_cft
+        run: |
+          {
+            echo "cft_content<<EOF"
+            cat cft.yml
+            echo "EOF"
+          } | tee -a "$GITHUB_OUTPUT"
+      - name: Write env vars to output
+        id: write_env_vars
+        run: |
+          ENV_VARS='${{toJson(vars)}}' python src/config.py --no-pretty
+          ls -Ahl
+          echo "env_vars=$(cat env.json)" | tee -a "$GITHUB_OUTPUT"
+    outputs:
+      cft_content: ${{steps.write_cft.outputs.cft_content}}
+      env_vars: ${{steps.write_env_vars.outputs.env_vars}}
+  deploy:
+    name: Deploy
+    needs: [init, build]
+    runs-on: ubuntu-latest
+    environment: ${{needs.init.outputs.deployment_env}}
+    env:
+      artifact_bucket_key: ${{needs.init.outputs.artifact_bucket_key}}
+      deployment_env: ${{needs.init.outputs.deployment_env}}
+      repository_name: ${{needs.init.outputs.repository_name}}
+    steps:
+      # Pull directly from outputs (because of content size).
+      - name: Read CFT content from previous output
+        run: |
+          cat > cft.yml <<"EOL"
+          ${{needs.build.outputs.cft_content}}
+          EOL
+          stat cft.yml
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{vars.AWS_REGION}}
+          role-to-assume: ${{vars.AWS_DEPLOY_ROLE_ARN}}
+          role-session-name: ${{needs.init.outputs.pipeline_id}}
+      - name: Deploy to AWS
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: ${{env.repository_name}}-${{env.deployment_env}}
+          template: cft.yml
+          capabilities: CAPABILITY_NAMED_IAM
+          parameter-overrides: >-
+            Component="${{env.repository_name}}",
+            Env="${{env.deployment_env}}",
+            ArtifactBucketName="${{vars.S3_ARTIFACT_BUCKET_NAME}}",
+            CodeArtifactBucketKey="${{env.artifact_bucket_key}}",
+            EnvVars='${{needs.build.outputs.env_vars}}'
+          tags: '[{"Key": "env", "Value": "${{env.deployment_env}}"}]'
+
+#
+#  validate:
+#    name: Validate
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Run integration tests
+#        run: pipenv run behave
