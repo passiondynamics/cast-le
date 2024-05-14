@@ -8,8 +8,8 @@ All steps prefixed with `(required)` must be done to fully setup your local repo
 
 (required) Clone the repo and enter it:
 ```bash
-git clone git@github.com:passiondynamics/cast-le.git
-cd cast-le/
+git clone git@github.com:passiondynamics/cineguess-backend.git
+cd cineguess-backend/
 ```
 
 ### Virtual environment
