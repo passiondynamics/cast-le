@@ -1,5 +1,5 @@
 def hello():
-    return 'Hello world!'
+    return "Hello world!"
 
 
 def main():
@@ -7,5 +7,5 @@ def main():
     print(result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

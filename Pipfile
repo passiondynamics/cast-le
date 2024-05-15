@@ -4,9 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+requests = "*"
 
 [dev-packages]
 behave = "*"
+black = "*"
 pytest = "*"
 pytest-cov = "*"
 
