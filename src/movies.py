@@ -1,6 +1,7 @@
 import requests
 import json
 
+TMDB_BASE_URL = "https://api.themoviedb.org/3/"
 
 def popular_movies(pages, headers):
     """
@@ -12,7 +13,7 @@ def popular_movies(pages, headers):
     """
     
     # api endpoint
-    url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page={}&region=840".format(pages) # region 840 is USA see https://en.wikipedia.org/wiki/ISO_3166-1 for other country codes
+    url = "{}movie/popular?language=en-US&page={}&region=840".format(TMDB_BASE_URL, pages) # region 840 is USA see https://en.wikipedia.org/wiki/ISO_3166-1 for other country codes
 
     # use the api url and headers to get the information on the popular movies
     response = requests.get(url, headers=headers)
@@ -30,7 +31,7 @@ def toprated_movies(pages, headers):
     """
     
     # api endpoint
-    url = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page={}&region=840".format(pages)
+    url = "{}movie/top_rated?language=en-US&page={}&region=840".format(TMDB_BASE_URL, pages)
 
     # use the api url and headers to get the information on the popular movies
     response = requests.get(url, headers=headers)
@@ -67,7 +68,7 @@ def actors(movies, headers):
     for movie in movies.get("movies", []):
         movie_id = movie.get("id")
         # api endpoint
-        url = "https://api.themoviedb.org/3/movie/{}/credits?language=en-US".format(movie_id)
+        url = "{}movie/{}/credits?language=en-US".format(TMDB_BASE_URL, movie_id)
         # use the api url and headers to get the cast
         response = requests.get(url, headers=headers)
         most_popular_actors = popular_actors(response.json())
@@ -128,7 +129,7 @@ def actor_images(movies, headers):
         for actor_id in actor_ids:
 
             # api endpoint for getting actor images
-            url = "https://api.themoviedb.org/3/person/{}/images".format(actor_id)
+            url = "{}person/{}/images".format(TMDB_BASE_URL, actor_id)
             response = requests.get(url, headers=headers)
             images = response.json().get("profiles", [])
 
@@ -157,7 +158,7 @@ def related_movies(movies, headers):
         actor_ids = movie.get("actors", [])
         for actor_id in actor_ids:
             # api endpoint
-            actor_url = "https://api.themoviedb.org/3/person/{}/movie_credits?language=en-US".format(actor_id)
+            actor_url = "{}person/{}/movie_credits?language=en-US".format(TMDB_BASE_URL, actor_id)
             actor_response = requests.get(actor_url, headers=headers)
             actor_movies = actor_response.json().get("cast", [])
             
