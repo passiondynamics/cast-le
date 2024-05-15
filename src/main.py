@@ -1,7 +1,7 @@
 from src.movies import *
 
 def hello():
-    return 'Hello world!'
+    return "Hello world!"
 
 
 def main():
@@ -22,5 +22,5 @@ def main():
 
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
