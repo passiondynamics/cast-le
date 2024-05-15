@@ -1,7 +1,10 @@
 import requests
 import json
 
+# standard URL for the TMDB API
 TMDB_BASE_URL = "https://api.themoviedb.org/3/"
+# number of actors that will be used in the game (this will remain at 4)
+NUMBER_OF_ACTORS = 4
 
 def popular_movies(pages, headers):
     """
@@ -106,11 +109,8 @@ def popular_actors(cast):
     # sort the cast list based on popularity in descending order
     sorted_cast = sorted(cast["cast"], key=lambda x: x["popularity"], reverse=True)
 
-    # top x actors in terms of popularity
-    number_of_actors = 4
-
     # get the ids of the top 4 actors
-    most_popular_actors = [actor["id"] for actor in sorted_cast[:number_of_actors]]
+    most_popular_actors = [actor["id"] for actor in sorted_cast[:NUMBER_OF_ACTORS]]
     return most_popular_actors
 
 
