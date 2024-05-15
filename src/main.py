@@ -1,8 +1,7 @@
 from src.movies import *
+from src.config import load_env_vars
 
-def hello():
-    return "Hello world!"
-
+env_vars = load_env_vars()
 
 def main():
     # number of pages of movies to get from the API. 1 page is 20 movies.
@@ -11,7 +10,7 @@ def main():
     # api authorization
     headers = {
         "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "Authorization": "Bearer " + env_vars["TMDB_API_TOKEN"]
     }
 
     data = toprated_movies(pages, headers) # gets movie data from the TMDB API

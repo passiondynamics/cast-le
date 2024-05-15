@@ -588,12 +588,472 @@ def test_related_movies():
 
     # api authorization
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWNhNjRiOGE1ZGM4OWZlNTNmNzQ5Y2I4MDAwMGIxMSIsInN1YiI6IjY1YjAwMWJhNjdiNjEzMDBlYjUzODA2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B5tu8C5pXbVtxrfR0aPJgqLu0povlRhuf1a8T7sWDjk"
+        "accept": "accept",
+        "Authorization": "authorization"
     }
     
-    input = {'movies': [{'id': 238, 'title': 'The Lord of the Rings: The Return of the King', 'actors': [110, 109, 1328, 1327], 'actor_images': ['/jPsLqiYGSofU4s6BjrxnefMfabb.jpg', '/9RgzFqbmWBLVfq9wvyDo5UW8VT1.jpg']}]}
-    expected = {'movies': [{'id': 238, 'title': 'The Lord of the Rings: The Return of the King', 'actors': [110, 109, 1328, 1327], 'actor_images': ['/jPsLqiYGSofU4s6BjrxnefMfabb.jpg', '/9RgzFqbmWBLVfq9wvyDo5UW8VT1.jpg'], 'alternative_answers': {"A Passage to Middle-earth: Making of 'Lord of the Rings'", 'Film Collectibles: Capturing Movie Memories', 'Quest for the Ring', 'Ringers: Lord of the Fans', 'The Lord of the Rings: The Fellowship of the Ring', 'The Lord of the Rings: The Return of the King', 'The Lord of the Rings: The Two Towers', "The Quest Fulfilled: A Director's Vision", 'The Lord of the Rings: The Return of the King', 'The Lord of the Rings: The Fellowship of the Ring'}}]}
+    with requests_mock.Mocker() as mock_requests:
+        mock_requests.get("https://api.themoviedb.org/3/person/109/movie_credits?language=en-US", json={
+  "cast": [
+    {
+      "adult": False,
+      "backdrop_path": "/jz9Kep0xWjiA6QDHSsd43ASxNfj.jpg",
+      "genre_ids": [
+        878,
+        18,
+        10749
+      ],
+      "id": 38,
+      "original_language": "en",
+      "original_title": "Eternal Sunshine of the Spotless Mind",
+      "overview": "Joel Barish, heartbroken that his girlfriend underwent a procedure to erase him from her memory, decides to do the same. However, as he watches his memories of her fade away, he realises that he still loves her, and may be too late to correct his mistake.",
+      "popularity": 81.875,
+      "poster_path": "/5MwkWH9tYHv3mV9OdYTMR5qreIz.jpg",
+      "release_date": "2004-03-19",
+      "title": "Eternal Sunshine of the Spotless Mind",
+      "video": False,
+      "vote_average": 8.097,
+      "vote_count": 14398,
+      "character": "Patrick",
+      "credit_id": "52fe4211c3a36847f8001677",
+      "order": 4
+    },
+    {
+      "adult": False,
+      "backdrop_path": "/6G73mNyooWAEQTpckPSnFxFoNmc.jpg",
+      "genre_ids": [
+        12,
+        14,
+        28
+      ],
+      "id": 121,
+      "original_language": "en",
+      "original_title": "The Lord of the Rings: The Two Towers",
+      "overview": "Frodo and Sam are trekking to Mordor to destroy the One Ring of Power while Gimli, Legolas and Aragorn search for the orc-captured Merry and Pippin. All along, nefarious wizard Saruman awaits the Fellowship members at the Orthanc Tower in Isengard.",
+      "popularity": 115.753,
+      "poster_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
+      "release_date": "2002-12-18",
+      "title": "The Lord of the Rings: The Two Towers",
+      "video": False,
+      "vote_average": 8.4,
+      "vote_count": 21140,
+      "character": "Frodo Baggins",
+      "credit_id": "52fe421ac3a36847f8004589",
+      "order": 0
+    },
+    {
+      "adult": False,
+      "backdrop_path": "/2u7zbn8EudG6kLlBzUYqP8RyFU4.jpg",
+      "genre_ids": [
+        12,
+        14,
+        28
+      ],
+      "id": 122,
+      "original_language": "en",
+      "original_title": "The Lord of the Rings: The Return of the King",
+      "overview": "Aragorn is revealed as the heir to the ancient kings as he, Gandalf and the other members of the broken fellowship struggle to save Gondor from Sauron's forces. Meanwhile, Frodo and Sam take the ring closer to the heart of Mordor, the dark lord's realm.",
+      "popularity": 132.611,
+      "poster_path": "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
+      "release_date": "2003-12-01",
+      "title": "The Lord of the Rings: The Return of the King",
+      "video": False,
+      "vote_average": 8.5,
+      "vote_count": 23384,
+      "character": "Frodo Baggins",
+      "credit_id": "52fe421bc3a36847f80046f7",
+      "order": 0
+    },
+    {
+      "adult": False,
+      "backdrop_path": "/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg",
+      "genre_ids": [
+        12,
+        14,
+        28
+      ],
+      "id": 120,
+      "original_language": "en",
+      "original_title": "The Lord of the Rings: The Fellowship of the Ring",
+      "overview": "Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.",
+      "popularity": 164.708,
+      "poster_path": "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+      "release_date": "2001-12-18",
+      "title": "The Lord of the Rings: The Fellowship of the Ring",
+      "video": False,
+      "vote_average": 8.4,
+      "vote_count": 24324,
+      "character": "Frodo Baggins",
+      "credit_id": "52fe421ac3a36847f800448f",
+      "order": 0
+    }
+            ]
+        }
+        )
+        mock_requests.get("https://api.themoviedb.org/3/person/1327/movie_credits?language=en-US", json={
+            "cast": [
+                {
+                "adult": False,
+                "backdrop_path": "/5EEdDTV0IBxJ2J4jDUDvl076v7f.jpg",
+                "genre_ids": [
+                    18,
+                    53,
+                    80
+                ],
+                "id": 59,
+                "original_language": "en",
+                "original_title": "A History of Violence",
+                "overview": "An average family is thrust into the spotlight after the father commits a seemingly self-defense murder at his diner.",
+                "popularity": 31.45,
+                "poster_path": "/3qnO72NHmUgs9JZXAmu4aId9QDl.jpg",
+                "release_date": "2005-09-23",
+                "title": "A History of Violence",
+                "video": False,
+                "vote_average": 7.168,
+                "vote_count": 3072,
+                "character": "Tom Stall / Joey Cusack",
+                "credit_id": "52fe4212c3a36847f8001927",
+                "order": 0
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/6G73mNyooWAEQTpckPSnFxFoNmc.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 121,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Two Towers",
+                "overview": "Frodo and Sam are trekking to Mordor to destroy the One Ring of Power while Gimli, Legolas and Aragorn search for the orc-captured Merry and Pippin. All along, nefarious wizard Saruman awaits the Fellowship members at the Orthanc Tower in Isengard.",
+                "popularity": 115.753,
+                "poster_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
+                "release_date": "2002-12-18",
+                "title": "The Lord of the Rings: The Two Towers",
+                "video": False,
+                "vote_average": 8.4,
+                "vote_count": 21140,
+                "character": "Aragorn",
+                "credit_id": "52fe421ac3a36847f8004591",
+                "order": 4
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/2u7zbn8EudG6kLlBzUYqP8RyFU4.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 122,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Return of the King",
+                "overview": "Aragorn is revealed as the heir to the ancient kings as he, Gandalf and the other members of the broken fellowship struggle to save Gondor from Sauron's forces. Meanwhile, Frodo and Sam take the ring closer to the heart of Mordor, the dark lord's realm.",
+                "popularity": 132.611,
+                "poster_path": "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
+                "release_date": "2003-12-01",
+                "title": "The Lord of the Rings: The Return of the King",
+                "video": False,
+                "vote_average": 8.5,
+                "vote_count": 23384,
+                "character": "Aragorn",
+                "credit_id": "52fe421bc3a36847f80046ff",
+                "order": 3
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 120,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Fellowship of the Ring",
+                "overview": "Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.",
+                "popularity": 164.708,
+                "poster_path": "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+                "release_date": "2001-12-18",
+                "title": "The Lord of the Rings: The Fellowship of the Ring",
+                "video": False,
+                "vote_average": 8.4,
+                "vote_count": 24324,
+                "character": "Aragorn",
+                "credit_id": "52fe421ac3a36847f8004497",
+                "order": 2
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/q3ND5eHCkwzbx7xL0inrSJko0PL.jpg",
+                "genre_ids": [
+                    80,
+                    53,
+                    18
+                ],
+                "id": 1965,
+                "original_language": "en",
+                "original_title": "A Perfect Murder",
+                "overview": "Millionaire industrialist Steven Taylor is a man who has everything but what he craves most: the love and fidelity of his wife. A hugely successful player in the New York financial world, he considers her to be his most treasured acquisition. But she needs more than simply the role of dazzling accessory.",
+                "popularity": 32.477,
+                "poster_path": "/wC0ax12N9GQ8vMXPEs4nES5AAiB.jpg",
+                "release_date": "1998-06-05",
+                "title": "A Perfect Murder",
+                "video": False,
+                "vote_average": 6.519,
+                "vote_count": 1311,
+                "character": "David Shaw",
+                "credit_id": "52fe4326c3a36847f803e3a5",
+                "order": 2
+                }
+            ]
+        }
+        )
+        mock_requests.get("https://api.themoviedb.org/3/person/1328/movie_credits?language=en-US", json={
+            "cast": [
+                {
+                "adult": False,
+                "backdrop_path": "/5EEdDTV0IBxJ2J4jDUDvl076v7f.jpg",
+                "genre_ids": [
+                    18,
+                    53,
+                    80
+                ],
+                "id": 59,
+                "original_language": "en",
+                "original_title": "A History of Violence",
+                "overview": "An average family is thrust into the spotlight after the father commits a seemingly self-defense murder at his diner.",
+                "popularity": 31.45,
+                "poster_path": "/3qnO72NHmUgs9JZXAmu4aId9QDl.jpg",
+                "release_date": "2005-09-23",
+                "title": "A History of Violence",
+                "video": False,
+                "vote_average": 7.168,
+                "vote_count": 3072,
+                "character": "Tom Stall / Joey Cusack",
+                "credit_id": "52fe4212c3a36847f8001927",
+                "order": 0
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/6G73mNyooWAEQTpckPSnFxFoNmc.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 121,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Two Towers",
+                "overview": "Frodo and Sam are trekking to Mordor to destroy the One Ring of Power while Gimli, Legolas and Aragorn search for the orc-captured Merry and Pippin. All along, nefarious wizard Saruman awaits the Fellowship members at the Orthanc Tower in Isengard.",
+                "popularity": 115.753,
+                "poster_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
+                "release_date": "2002-12-18",
+                "title": "The Lord of the Rings: The Two Towers",
+                "video": False,
+                "vote_average": 8.4,
+                "vote_count": 21140,
+                "character": "Aragorn",
+                "credit_id": "52fe421ac3a36847f8004591",
+                "order": 4
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/2u7zbn8EudG6kLlBzUYqP8RyFU4.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 122,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Return of the King",
+                "overview": "Aragorn is revealed as the heir to the ancient kings as he, Gandalf and the other members of the broken fellowship struggle to save Gondor from Sauron's forces. Meanwhile, Frodo and Sam take the ring closer to the heart of Mordor, the dark lord's realm.",
+                "popularity": 132.611,
+                "poster_path": "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
+                "release_date": "2003-12-01",
+                "title": "The Lord of the Rings: The Return of the King",
+                "video": False,
+                "vote_average": 8.5,
+                "vote_count": 23384,
+                "character": "Aragorn",
+                "credit_id": "52fe421bc3a36847f80046ff",
+                "order": 3
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 120,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Fellowship of the Ring",
+                "overview": "Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.",
+                "popularity": 164.708,
+                "poster_path": "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+                "release_date": "2001-12-18",
+                "title": "The Lord of the Rings: The Fellowship of the Ring",
+                "video": False,
+                "vote_average": 8.4,
+                "vote_count": 24324,
+                "character": "Aragorn",
+                "credit_id": "52fe421ac3a36847f8004497",
+                "order": 2
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/q3ND5eHCkwzbx7xL0inrSJko0PL.jpg",
+                "genre_ids": [
+                    80,
+                    53,
+                    18
+                ],
+                "id": 1965,
+                "original_language": "en",
+                "original_title": "A Perfect Murder",
+                "overview": "Millionaire industrialist Steven Taylor is a man who has everything but what he craves most: the love and fidelity of his wife. A hugely successful player in the New York financial world, he considers her to be his most treasured acquisition. But she needs more than simply the role of dazzling accessory.",
+                "popularity": 32.477,
+                "poster_path": "/wC0ax12N9GQ8vMXPEs4nES5AAiB.jpg",
+                "release_date": "1998-06-05",
+                "title": "A Perfect Murder",
+                "video": False,
+                "vote_average": 6.519,
+                "vote_count": 1311,
+                "character": "David Shaw",
+                "credit_id": "52fe4326c3a36847f803e3a5",
+                "order": 2
+                }
+            ]
+        }
+        )
+        mock_requests.get("https://api.themoviedb.org/3/person/110/movie_credits?language=en-US", json={
+            "cast": [
+                {
+                "adult": False,
+                "backdrop_path": "/5EEdDTV0IBxJ2J4jDUDvl076v7f.jpg",
+                "genre_ids": [
+                    18,
+                    53,
+                    80
+                ],
+                "id": 59,
+                "original_language": "en",
+                "original_title": "A History of Violence",
+                "overview": "An average family is thrust into the spotlight after the father commits a seemingly self-defense murder at his diner.",
+                "popularity": 31.45,
+                "poster_path": "/3qnO72NHmUgs9JZXAmu4aId9QDl.jpg",
+                "release_date": "2005-09-23",
+                "title": "A History of Violence",
+                "video": False,
+                "vote_average": 7.168,
+                "vote_count": 3072,
+                "character": "Tom Stall / Joey Cusack",
+                "credit_id": "52fe4212c3a36847f8001927",
+                "order": 0
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/6G73mNyooWAEQTpckPSnFxFoNmc.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 121,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Two Towers",
+                "overview": "Frodo and Sam are trekking to Mordor to destroy the One Ring of Power while Gimli, Legolas and Aragorn search for the orc-captured Merry and Pippin. All along, nefarious wizard Saruman awaits the Fellowship members at the Orthanc Tower in Isengard.",
+                "popularity": 115.753,
+                "poster_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
+                "release_date": "2002-12-18",
+                "title": "The Lord of the Rings: The Two Towers",
+                "video": False,
+                "vote_average": 8.4,
+                "vote_count": 21140,
+                "character": "Aragorn",
+                "credit_id": "52fe421ac3a36847f8004591",
+                "order": 4
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/2u7zbn8EudG6kLlBzUYqP8RyFU4.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 122,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Return of the King",
+                "overview": "Aragorn is revealed as the heir to the ancient kings as he, Gandalf and the other members of the broken fellowship struggle to save Gondor from Sauron's forces. Meanwhile, Frodo and Sam take the ring closer to the heart of Mordor, the dark lord's realm.",
+                "popularity": 132.611,
+                "poster_path": "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
+                "release_date": "2003-12-01",
+                "title": "The Lord of the Rings: The Return of the King",
+                "video": False,
+                "vote_average": 8.5,
+                "vote_count": 23384,
+                "character": "Aragorn",
+                "credit_id": "52fe421bc3a36847f80046ff",
+                "order": 3
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg",
+                "genre_ids": [
+                    12,
+                    14,
+                    28
+                ],
+                "id": 120,
+                "original_language": "en",
+                "original_title": "The Lord of the Rings: The Fellowship of the Ring",
+                "overview": "Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.",
+                "popularity": 164.708,
+                "poster_path": "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+                "release_date": "2001-12-18",
+                "title": "The Lord of the Rings: The Fellowship of the Ring",
+                "video": False,
+                "vote_average": 8.4,
+                "vote_count": 24324,
+                "character": "Aragorn",
+                "credit_id": "52fe421ac3a36847f8004497",
+                "order": 2
+                },
+                {
+                "adult": False,
+                "backdrop_path": "/q3ND5eHCkwzbx7xL0inrSJko0PL.jpg",
+                "genre_ids": [
+                    80,
+                    53,
+                    18
+                ],
+                "id": 1965,
+                "original_language": "en",
+                "original_title": "A Perfect Murder",
+                "overview": "Millionaire industrialist Steven Taylor is a man who has everything but what he craves most: the love and fidelity of his wife. A hugely successful player in the New York financial world, he considers her to be his most treasured acquisition. But she needs more than simply the role of dazzling accessory.",
+                "popularity": 32.477,
+                "poster_path": "/wC0ax12N9GQ8vMXPEs4nES5AAiB.jpg",
+                "release_date": "1998-06-05",
+                "title": "A Perfect Murder",
+                "video": False,
+                "vote_average": 6.519,
+                "vote_count": 1311,
+                "character": "David Shaw",
+                "credit_id": "52fe4326c3a36847f803e3a5",
+                "order": 2
+                }
+            ]
+        }
+        )
+    
+            
+        input = {'movies': [{'id': 238, 'title': 'The Lord of the Rings: The Return of the King', 'actors': [110, 109, 1328, 1327], 'actor_images': ['/jPsLqiYGSofU4s6BjrxnefMfabb.jpg', '/9RgzFqbmWBLVfq9wvyDo5UW8VT1.jpg']}]}
+        expected = {'movies': [{'id': 238, 'title': 'The Lord of the Rings: The Return of the King', 'actors': [110, 109, 1328, 1327], 'actor_images': ['/jPsLqiYGSofU4s6BjrxnefMfabb.jpg', '/9RgzFqbmWBLVfq9wvyDo5UW8VT1.jpg'], 'alternative_answers': {'The Lord of the Rings: The Two Towers', 'The Lord of the Rings: The Return of the King', 'The Lord of the Rings: The Fellowship of the Ring'}}]}
 
-    actual = src.movies.related_movies(input, headers)
-    assert actual == expected
+        actual = src.movies.related_movies(input, headers)
+        assert actual == expected

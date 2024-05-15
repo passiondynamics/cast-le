@@ -160,7 +160,7 @@ def related_movies(movies, headers):
             actor_url = "https://api.themoviedb.org/3/person/{}/movie_credits?language=en-US".format(actor_id)
             actor_response = requests.get(actor_url, headers=headers)
             actor_movies = actor_response.json().get("cast", [])
-    
+            
             # create a set of the movies and then find the intersection of those sets
             if movie_set is None:
                 movie_set = set(m["title"] for m in actor_movies)
@@ -170,6 +170,5 @@ def related_movies(movies, headers):
 
         # add the alternative answers to the movie json
         movie["alternative_answers"] = movie_set
-
 
     return movies
