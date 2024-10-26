@@ -167,7 +167,7 @@ Resources:
     Type: AWS::Scheduler::Schedule
     Properties:
       FlexibleTimeWindow:
-        Mode: OFF
+        Mode: "OFF"
       ScheduleExpression: rate(7 days)
       Target:
         Arn: !GetAtt LambdaFunction.Arn
