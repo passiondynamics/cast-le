@@ -171,7 +171,7 @@ Resources:
       ScheduleExpression: rate(7 days)
       Target:
         Arn: !GetAtt LambdaFunction.Arn
-        RoleArn: !GetAtt LambdaRole.Arn
+        RoleArn: !GetAtt ScheduleRole.Arn
 
   # --- API Gateway resources (to allow external invocation) ---
   APIGatewayRoute:
