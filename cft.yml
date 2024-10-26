@@ -85,45 +85,93 @@ Resources:
               - 'logs:CreateLogStream'
               - 'logs:PutLogEvents'
             Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${Component}-${Env}:*'
-#          - Effect: Allow
-#            Action: 'dynamodb:Query'
-#            Resource:
-#              - !GetAtt DynamoDBTable.Arn
-#              - !Sub
-#                - '${Arn}/index/*'
-#                - Arn: !GetAtt DynamoDBTable.Arn
-#          - Effect: Allow
-#            Action: 'dynamodb:UpdateItem'
-#            Resource: !GetAtt DynamoDBTable.Arn
+          - Effect: Allow
+            Action: 'dynamodb:Query'
+            Resource:
+              - !GetAtt DynamoDBTable.Arn
+              - !Sub
+                - '${Arn}/index/*'
+                - Arn: !GetAtt DynamoDBTable.Arn
+          - Effect: Allow
+            Action: 'dynamodb:UpdateItem'
+            Resource: !GetAtt DynamoDBTable.Arn
       Roles:
         - !Ref LambdaRole
 #      Tags:
 #        - Key: env
 #          Value: !Ref Env
 
+  ScheduleRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: 'sts:AssumeRole'
+      RoleName: !Sub '${Component}-${Env}-schedule-role'
+      Tags:
+        - Key: env
+          Value: !Ref Env
+
+  SchedulePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${Component}-${Env}-schedule-policy'
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'lambda:InvokeFunction'
+            Resource: # TODO: use !Sub ${!GetAtt LambdaFunction}?
+              - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Component}-${Env}:*"
+              - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Component}-${Env}"
+      Roles:
+        - !Ref ScheduleRole
+#      Tags:
+#        - Key: env
+#          Value: !Ref Env
+
   # --- DynamoDB resource (for persisting state across invocations) ---
-#  DynamoDBTable:
-#    Type: 'AWS::DynamoDB::GlobalTable'
-#    Properties:
-#      AttributeDefinitions:
-#        - AttributeName: user
-#          AttributeType: S
-#        - AttributeName: twitch_user_id
-#          AttributeType: S
-#        - AttributeName: discord_user_id
-#          AttributeType: S
-#        - AttributeName: github_user_id
-#          AttributeType: S
-#      BillingMode: PAY_PER_REQUEST
-#      KeySchema:
-#        - AttributeName: user
-#          KeyType: HASH
-#      Replicas:
-#        - Region: us-east-1
-#          Tags:
-#            - Key: env
-#              Value: !Ref Env
-#      TableName: !Sub '${Component}-${Env}-state'
+  DynamoDBTable:
+    Type: 'AWS::DynamoDB::GlobalTable'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: challenge_date
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: N
+      BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes:
+        - IndexName: id-lookup-index
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+      KeySchema:
+        - AttributeName: challenge_date
+          KeyType: HASH
+      Replicas:
+        - Region: us-east-1
+          Tags:
+            - Key: env
+              Value: !Ref Env
+      TableName: !Sub '${Component}-${Env}-state'
+
+  # --- Schedule resource (for regular, scheduled invocations) ---
+  Schedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      FlexibleTimeWindow:
+        Mode: OFF
+      ScheduleExpression: rate(7 days)
+      Target:
+        Arn: !GetAtt LambdaFunction.Arn
+        RoleArn: !GetAtt LambdaRole.Arn
 
   # --- API Gateway resources (to allow external invocation) ---
   APIGatewayRoute:
